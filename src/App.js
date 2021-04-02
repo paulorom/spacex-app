@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import NavBar from "../src/components/NavBar";
+import Content from "../src/components/Content";
+import Footer from "../src/components/Footer";
+//import bg from "./assets/images/bg.jpg";
+import styled from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
-function App() {
+//background-image: url(${bg});
+const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
+  body {
+    font-family: 'Open Sans', sans-serif;
+    color: '#868686';
+    height: 100%;
+    margin: 7px 65px;
+    
+    background-repeat: repeat;
+    @media (max-width: 800px) {
+      margin: 10px;
+    }
+  }
+  body.blackTheme {
+    background: black;
+    color: white;
+  }
+  body.blackTheme div div div p {
+    color: black;
+  }
+`;
+
+const Wrapper = styled.div`
+  width: 1200px;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wrapper>
+      <GlobalStyle />
+      <NavBar />
+      <Content />
+      <Footer />
+    </Wrapper>
   );
 }
-
 export default App;
