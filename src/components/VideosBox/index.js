@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
@@ -184,29 +184,46 @@ const ModalButton = () => {
     </div>
   );
 };
+
 const LAUNCHES = gql`
   {
-    launchesPast(limit: 10) {
-      mission_name
-      launch_date_local
-      launch_site {
-        site_name_long
-      }
-      links {
-        video_link
-      }
-      rocket {
-        rocket_name
-      }
-      details
+    launchesPast(limit: 20) {     
+        mission_name
+        launch_date_local
+        launch_site {
+          site_name_long
+        }
+        links {
+          video_link
+        }
+        rocket {
+          rocket_name
+        }
+        details      
     }
   }
 `;
 
 const VideosBox = () => {
   const [showCardDetails, setCardDetails] = useState(false);
-  const [searchFilter, setSearchFilter] = useState('');
   const { errors, loading, data } = useQuery(LAUNCHES);
+  const [isDisplayDataSet, setIsDisplayDataSet] = useState(false);
+  const [displayData, setDisplayData] = useState([]);
+
+  useEffect(() => {
+    if (!loading && !isDisplayDataSet) {
+        setDisplayData(data.launchesPast);
+        setIsDisplayDataSet(true);
+    }
+  }, [isDisplayDataSet, displayData, data, loading])
+
+  function handleSearch(e) {
+    const { value } = e.target;
+    const matchingElements = data.launchesPast.filter(({ mission_name }) =>
+        mission_name.toLowerCase().includes(value.toLowerCase())
+    );
+    setDisplayData(matchingElements);
+  }
   
   return errors
     ? "Error!"
@@ -214,50 +231,48 @@ const VideosBox = () => {
     ? "Loading..."
     : 
     <>
-    <SearchContainer>
-    
-    <input type="text" onChange={(e) => setSearchFilter(e.target.value)} />
-      <button>OK</button>
-    </SearchContainer>
-    <Swiper {...params}>
-      {
-    data.launchesPast.map(
-        ({
-          mission_name,
-          launch_date_local,
-          launch_site,
-          rocket,
-          details,
-          links,
-        }) => (
-          <Container key={mission_name}>
-            <Card>
-            <BoxImage desktopTheme>
-                  <img
-                    src={`https://img.youtube.com/vi/${links.video_link.replace(
-                      "https://youtu.be/",
-                      ""
-                    )}/0.jpg`}
-                    alt={mission_name}
-                  />
-                </BoxImage>
+      <SearchContainer>
+        <input type="text" onChange={handleSearch} placeholder="Search..." />
+      </SearchContainer>
 
-              <p>{launch_date_local}</p>
-              <p>{rocket.rocket_name}</p>
-              <p>{links.video_link}</p>
-              <p>{details}</p>
-              <Button desktopTheme onClick={setCardDetails}>
-                Leia mais...
-              </Button>
-              <ModalButton />
-              {showCardDetails && <CardDetails />}
-            </Card>            
-          </Container>
-          )
+      <Swiper {...params}>
+        {
+          displayData.map(
+          ({
+            mission_name,
+            launch_date_local,
+            launch_site,
+            rocket,
+            details,
+            links,
+          }) => (
+            <Container key={mission_name}>
+              <Card>
+              <BoxImage desktopTheme>
+                    <img
+                      src={`https://img.youtube.com/vi/${links.video_link.replace(
+                        "https://youtu.be/",
+                        ""
+                      )}/0.jpg`}
+                      alt={mission_name}
+                    />
+                  </BoxImage>
+                  <p>{mission_name}</p>
+                <p>{launch_date_local}</p>
+                <p>{rocket.rocket_name}</p>
+                <p>{links.video_link}</p>
+                <p>{details}</p>
+                <Button desktopTheme onClick={setCardDetails}>
+                  Leia mais...
+                </Button>
+                <ModalButton />
+                {showCardDetails && <CardDetails />}
+              </Card>            
+            </Container>
+            )
           )}
-        </Swiper>
-      </>
-  
+      </Swiper>
+    </>  
 };
 
 export default VideosBox;
