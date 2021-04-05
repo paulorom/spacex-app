@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-import { ReactComponent as Logo } from "../../assets/images/logo.svg";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import Modal, { ModalProvider, BaseModalBackground } from "styled-react-modal";
+import "react-id-swiper/src/styles/scss/swiper.scss";
+import Swiper from "react-id-swiper/lib/ReactIdSwiper.full";
 
 const Container = styled.div`
   display: flex;
   margin: 20px auto;
   justify-content: center;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 10px 35px;
+  width: 280px !important;
+  background: #f0e9dc;
   @media (max-width: 800px) {
     flex-direction: column;
   }
@@ -19,13 +25,12 @@ const Card = styled.div`
   font-size: 16px;
   font-weight: 100;
   text-align: center;
-  margin: 0 10px;
+  margin: 0;
   text-align: justify;
   width: 350px;
   @media (max-width: 800px) {
     flex-direction: column;
     width: calc(100% - 20px);
-    margin: 10px;
   }
   p {
     padding: 10px;
@@ -43,9 +48,9 @@ const Card = styled.div`
 
 const BoxImage = styled.div`
   text-align: center;
-  padding: 15px;
-  background: ${(props) =>
-    props.desktopTheme ? "#FE9481" : props.tabletTheme ? "#FCDA92" : "#9C8CB9"};
+  img {
+    width: 100%;
+  }
   h2 {
     font-weight: 100;
     color: #fff;
@@ -61,14 +66,6 @@ const Button = styled.button`
   background: ${(props) =>
     props.desktopTheme ? "#FE9481" : props.tabletTheme ? "#FCDA92" : "#9C8CB9"};
 `;
-
-const CardDetails = () => {
-  return (
-    <StyledCardDetails>
-      Aqui é uma região destinada aos detalhes do primeiro Card.
-    </StyledCardDetails>
-  );
-};
 
 const StyledCardDetails = styled.div`
   width: 80%;
@@ -90,6 +87,57 @@ const StyledModal = Modal.styled`
   opacity: ${(props) => props.opacity};
   transition: opacity ease 500ms;
 `;
+
+const SearchContainer = styled.div`
+  top: 32px;
+  left: 50px;
+  height: auto;
+  margin: 0 auto;
+  input {
+    width: 50vw;
+  }
+  @media (max-width: 800px) {
+    input {
+      width: 80vw;
+    }
+  }
+`;
+
+const params = {
+  effect: "coverflow",
+  grabCursor: true,
+  centeredSlides: true,
+  slidesPerView: "auto",
+  initialSlide: 2,
+  slideActiveClass: "swiper-slide-active",
+  spaceBetween: 0,
+  coverflowEffect: {
+    rotate: 0,
+    stretch: 10,
+    depth: 100,
+    modifier: 1,
+    slideShadows: false,
+  },
+  breakpoints: {
+    1024: {
+      coverflowEffect: {
+        rotate: 0,
+        stretch: -25,
+        depth: 50,
+        modifier: 1,
+        slideShadows: false,
+      },
+    },
+  },
+};
+
+const CardDetails = () => {
+  return (
+    <StyledCardDetails>
+      Aqui é uma região destinada aos detalhes do primeiro Card.
+    </StyledCardDetails>
+  );
+};
 
 const ModalButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -129,13 +177,6 @@ const ModalButton = () => {
         <p>
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
         </p>
         <br />
         <button onClick={toggleModal}>Fechar</button>
@@ -143,7 +184,6 @@ const ModalButton = () => {
     </div>
   );
 };
-
 const LAUNCHES = gql`
   {
     launchesPast(limit: 10) {
@@ -165,14 +205,23 @@ const LAUNCHES = gql`
 
 const VideosBox = () => {
   const [showCardDetails, setCardDetails] = useState(false);
-
+  const [searchFilter, setSearchFilter] = useState('');
   const { errors, loading, data } = useQuery(LAUNCHES);
-
+  
   return errors
     ? "Error!"
     : loading
     ? "Loading..."
-    : data.launchesPast.map(
+    : 
+    <>
+    <SearchContainer>
+    
+    <input type="text" onChange={(e) => setSearchFilter(e.target.value)} />
+      <button>OK</button>
+    </SearchContainer>
+    <Swiper {...params}>
+      {
+    data.launchesPast.map(
         ({
           mission_name,
           launch_date_local,
@@ -183,9 +232,15 @@ const VideosBox = () => {
         }) => (
           <Container key={mission_name}>
             <Card>
-              <BoxImage desktopTheme>
-                <h2>{mission_name}</h2>
-              </BoxImage>
+            <BoxImage desktopTheme>
+                  <img
+                    src={`https://img.youtube.com/vi/${links.video_link.replace(
+                      "https://youtu.be/",
+                      ""
+                    )}/0.jpg`}
+                    alt={mission_name}
+                  />
+                </BoxImage>
 
               <p>{launch_date_local}</p>
               <p>{rocket.rocket_name}</p>
@@ -198,8 +253,11 @@ const VideosBox = () => {
               {showCardDetails && <CardDetails />}
             </Card>            
           </Container>
-        )
-      );
+          )
+          )}
+        </Swiper>
+      </>
+  
 };
 
 export default VideosBox;

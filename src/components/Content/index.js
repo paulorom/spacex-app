@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import SearchBox from "../../components/SearchBox";
 import VideosBox from "../../components/VideosBox";
 import Modal, { ModalProvider, BaseModalBackground } from "styled-react-modal";
 
@@ -32,7 +31,6 @@ const Text = styled.p`
 
 const Button = styled.button`
   margin: 10px;
-  float: right;
   border: 0;
   color: #fff;
   padding: 5px;
@@ -55,11 +53,11 @@ const Content = () => {
   return (
     <ModalProvider backgroundComponent={FadingBackground}>
       <Title>SpaceX Videos Search</Title>
-      <Text>Search as you type videos interesting from elon musk company</Text>
+      <Text>Search as you type videos interesting from elon musk company
       <Button mobileTheme onClick={() => setIsOpen(!isOpen)}>
         Change Theme
       </Button>
-      <SearchBox />
+      </Text>      
       <VideosBox />
     </ModalProvider>
   );

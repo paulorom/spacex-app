@@ -2,7 +2,8 @@ import React from "react";
 import NavBar from "../src/components/NavBar";
 import Content from "../src/components/Content";
 import Footer from "../src/components/Footer";
-//import bg from "./assets/images/bg.jpg";
+import f9 from "./assets/images/f9_feature.webp";
+import rs from "./assets/images/rideshare_feature.webp";
 import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 
@@ -13,24 +14,22 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Open Sans', sans-serif;
     color: '#868686';
     height: 100%;
-    margin: 7px 65px;
-    
-    background-repeat: repeat;
+    margin: 0;
+    background-attachment: fixed;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: url(${f9});
     @media (max-width: 800px) {
-      margin: 10px;
+      margin: 0;
     }
   }
   body.blackTheme {
-    background: black;
-    color: white;
-  }
-  body.blackTheme div div div p {
-    color: black;
+    background: url(${rs});
   }
 `;
 
 const Wrapper = styled.div`
-  width: 1200px;
   @media (max-width: 800px) {
     width: 100%;
   }

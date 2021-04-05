@@ -24,21 +24,6 @@ const LogoContainer = styled.div`
   }
 `;
 
-const Link = styled.span`
-  color: #007f56;
-  font-weight: 100;
-  padding: 0 5px;
-  font-size: 1.4rem;
-  letter-spacing: -1px;
-  transform: scaleX(0.9);
-  text-shadow: 0 2px white;
-  @media (max-width: 800px) {
-    display: none;
-  }
-`;
-
-
-
 const NavBar = () => {
   return (
     <Nav>
