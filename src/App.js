@@ -9,6 +9,7 @@ import { createGlobalStyle } from "styled-components";
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Ropa+Sans&display=swap');
   body {
+    overflow-x: hidden;
     font-family: 'Ropa Sans', sans-serif;
     color: '#868686';
     height: 100%;

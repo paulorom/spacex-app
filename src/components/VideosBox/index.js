@@ -5,7 +5,6 @@ import { useQuery } from "react-apollo-hooks";
 import "react-id-swiper/src/styles/scss/swiper.scss";
 import Swiper from "react-id-swiper/lib/ReactIdSwiper.full";
 
-
 const SearchContainer = styled.div`
   top: 32px;
   left: 50px;
@@ -36,13 +35,14 @@ const SearchContainer = styled.div`
 
 const Container = styled.div`
   display: flex;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 10px 35px;
-  width: 280px !important;
-  height: 252px !important;
-  background: #f0e9dc;
+  flex-direction: column;
 `;
 
 const Card = styled.div`
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 10px 35px;
+  width: 280px !important;
+  margin-right: 30px !important;
+  height: 252px !important;
   background: #fff;
   font-size: 16px;
   font-weight: 100;
@@ -84,6 +84,8 @@ const Link = styled.a`
 
 const params = {
   spaceBetween: 30,
+  loop: true,
+  freeMode: true,
 };
 
 const LAUNCHES = gql`
@@ -129,7 +131,7 @@ const VideosBox = () => {
     : loading
     ? "Loading..."
     : 
-    <>
+    <Container>
       <SearchContainer>
         <input type="text" onChange={handleSearch} placeholder="Search..." />
       </SearchContainer>
@@ -140,27 +142,24 @@ const VideosBox = () => {
           ({
             mission_name,
             links,
-          }) => (
-            <Container key={mission_name}>
-              <Card>
-              <BoxImage desktopTheme>
-                
-                    <img
-                      src={`https://img.youtube.com/vi/${links.video_link.replace(
+          }) => (           
+              <Card key={mission_name}>
+              <BoxImage desktopTheme>                
+                <img
+                  src={`https://img.youtube.com/vi/${links.video_link.replace(
                         "https://youtu.be/",
                         ""
                       )}/0.jpg`}
-                      alt={mission_name}
-                    />
-                  </BoxImage>
-                  <p>{mission_name}</p>
-                  <p><Link target="_blank" href={links.video_link}>WATCH NOW</Link></p>
-              </Card>            
-            </Container>
+                  alt={mission_name}
+                />
+                </BoxImage>
+                <p>{mission_name}</p>
+                <p><Link target="_blank" href={links.video_link}>WATCH NOW</Link></p>
+              </Card>
             )
           )}
       </Swiper>
-    </>  
+    </Container>  
 };
 
 export default VideosBox;
