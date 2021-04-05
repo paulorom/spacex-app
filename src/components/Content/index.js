@@ -1,46 +1,50 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import VideosBox from "../../components/VideosBox";
-import Modal, { ModalProvider, BaseModalBackground } from "styled-react-modal";
 
 const Title = styled.h1`
   text-align: center;
-  width: 50%;
-  margin: 40px auto;
-  color: #007f56;
-  font-weight: 100;
+  width: 55%;
+  margin: 20px auto 20px;
+  color: #fff;
+  font-weight: 600;
+  transform: scaleY(1.1);
   letter-spacing: -1px;
+  font-size: 46px;
+  line-height: 46px;
   @media (max-width: 800px) {
-    width: 95%;
-  }
-  span {
-    font-weight: 800;
+    width: 90%;
   }
 `;
 
 const Text = styled.p`
-  width: 50%;
+  width: 70%;
   margin: 0 auto;
-  font-size: 20px;
-  font-weight: 100;
+  font-size: 14px;
+  font-weight: 600;
+  transform: scaleY(1.1);
+  letter-spacing: -1px;
   text-align: center;
+  color: #fff;
   @media (max-width: 800px) {
     width: 95%;
   }
 `;
 
 const Button = styled.button`
-  margin: 10px;
+  position: absolute;
+  top: 20px;
+  right: 10px;
   border: 0;
+  padding: 10px;
+  font-weight: 600;
+  font-size: 12px; 
   color: #fff;
-  padding: 5px;
-  background: ${(props) =>
-    props.desktopTheme ? "#FE9481" : props.tabletTheme ? "#FCDA92" : "#9C8CB9"};
-`;
-
-const FadingBackground = styled(BaseModalBackground)`
-  opacity: ${(props) => props.opacity};
-  transition: opacity ease 200ms;
+  background: transparent;
+  @media (max-width: 800px) {
+    top: 25px;
+    right: 10px;
+  }
 `;
 
 const Content = () => {
@@ -51,15 +55,14 @@ const Content = () => {
   }, [isOpen]);
 
   return (
-    <ModalProvider backgroundComponent={FadingBackground}>
-      <Title>SpaceX Videos Search</Title>
-      <Text>Search as you type videos interesting from elon musk company
+    <>
       <Button mobileTheme onClick={() => setIsOpen(!isOpen)}>
-        Change Theme
+        CHANGE THEME
       </Button>
-      </Text>      
+      <Title>SPACEX <br /> VIDEOS SEARCH</Title>
+      <Text>SEARCH AS YOU TYPE AND FIND ASTONISHING VIDEOS</Text>      
       <VideosBox />
-    </ModalProvider>
+    </>
   );
 };
 

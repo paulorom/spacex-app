@@ -5,6 +5,7 @@ import styled from "styled-components";
 const Nav = styled.nav`
   display: flex;
   justify-content: center;
+  height: 80px;
   div:last-child {
     display: flex;
     align-items: center;
